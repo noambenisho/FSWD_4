@@ -1,8 +1,12 @@
+import PropTypes from 'prop-types';
 import { useState } from "react";
 import { layouts } from "./keyboardLayouts";
 import "../CSS/Keyboard.css";
 
-export default function Keyboard({ text, setText }) {
+export default function Keyboard(props) {
+  const text = props.text;
+  const setText = props.setText;
+
   const [language, setLanguage] = useState("english");
   const [capsLock, setCapsLock] = useState(false);
 
@@ -46,3 +50,8 @@ export default function Keyboard({ text, setText }) {
 }
 // This component renders a keyboard interface with buttons for each character.
 // It allows the user to type in different languages (English, Hebrew, Emoji) and includes a Caps Lock feature.
+
+Keyboard.PropTypes = {
+  text: PropTypes.string.isRequired,
+  setText: PropTypes.func.isRequired,
+}

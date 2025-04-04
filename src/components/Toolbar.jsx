@@ -1,4 +1,9 @@
-export default function Toolbar({ setText, text }) {
+import PropTypes from 'prop-types';
+
+export default function Toolbar(props) {
+    const text = props.text;
+    const setText = props.setText;
+
     return (
       <div className="flex gap-2 p-2">
         <button onClick={() => setText("")} className="p-2 bg-red-500 text-white rounded">
@@ -11,3 +16,7 @@ export default function Toolbar({ setText, text }) {
     );
   }
   
+Toolbar.PropTypes = {
+    text: PropTypes.string.isRequired,
+    setText: PropTypes.func.isRequired,
+}
