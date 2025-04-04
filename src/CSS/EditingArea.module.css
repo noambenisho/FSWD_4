@@ -7,14 +7,14 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
   
-  .form label {
+.form label {
     display: block;
     margin-bottom: 0.05rem;
     color: #eadbfb;
     font-weight: bold;
   }
   
-  .form textarea {
+.form textarea {
     display: block;
     width: 100%;
     font: inherit;

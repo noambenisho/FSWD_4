@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from "react";
 import { layouts } from "./keyboardLayouts";
-import "../CSS/Keyboard.css";
+import classes from "../CSS/Keyboard.module.css";
 
 export default function Keyboard(props) {
   const text = props.text;
@@ -23,22 +23,25 @@ export default function Keyboard(props) {
   };
 
   return (
-    <div className="keyboard-container">
-      <div className="language-buttons">
-        <button onClick={() => setLanguage("english")} className="lang-button">EN</button>
-        <button onClick={() => setLanguage("hebrew")} className="lang-button">HE</button>
-        <button onClick={() => setLanguage("emoji")} className="lang-button">😀</button>
+    <div className={classes["keyboard-container"]}>
+      <div className={classes["language-buttons"]}>
+        <button onClick={() => setLanguage("english")} className={classes["language-buttons"]}>EN</button>
+        <button onClick={() => setLanguage("hebrew")} className={classes["language-buttons"]}>HE</button>
+        <button onClick={() => setLanguage("emoji")} className={classes["language-buttons"]}>😀</button>
       </div>
 
-      <div className="keyboard-layout">
+      <div className={["classes.keyboard-layouts"]}>
         {layouts[language].map((row, rowIndex) => (
-          <div key={rowIndex} className="keyboard-row">
+          <div key={rowIndex} className={["classes.keyboard-row"]}>
             {row.split(" ").map((char, index) => (
               <button 
                 key={index} 
                 onClick={() => handleKeyPress(char)}
-                className={`keyboard-key ${char === "Space" ? "space" : ""} ${char === "⌫" ? "delete" : ""} ${char === "Caps" ? "capslock" : ""}`}
-              >
+                className={`${classes["keyboard-key"]} 
+                ${char === "Space" ? classes.space : ""} 
+                ${char === "⌫" ? classes.delete : ""} 
+                ${char === "Caps" ? classes.capslock : ""}`
+              }>
                 {char === "Space" ? "␣" : capsLock && language === "english" ? char.toUpperCase() : char}
               </button>
             ))}
