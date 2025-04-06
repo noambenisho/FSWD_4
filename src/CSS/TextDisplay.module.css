@@ -1,6 +1,7 @@
-.text-display {
+.div {
     padding: 1rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #d1d5db;
     border-radius: 0.375rem;
-    background-color: #f3f4f6;
+    background-color: #caf0f3;
+    color: #000; 
 }

@@ -1,0 +1,21 @@
+.controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    background: #f4f4f4;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .controls label,
+  .controls button {
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .fontSelect option {
+    font-size: 1rem;
+  }
+  
