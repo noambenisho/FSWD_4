@@ -3,20 +3,22 @@ import classes from '../CSS/EditingArea.module.css';
 import TextDisplay from "./TextDisplay";
 import Toolbar from "./Toolbar";
 
-export default function EditingArea(props){
-    const text = props.text;
-    const setText = props.setText;
-
+export default function EditingArea(props) {
     return (
-        <form className={classes.form}>
+      <form className={classes.form}>
         <div>
-            <TextDisplay text={text} />
-            <Toolbar text={text} setText={setText} />
+          <TextDisplay 
+            text={props.text}
+            fontFamily={props.fontFamily}
+            fontSize={props.fontSize}
+            color={props.color}
+          />
+          <Toolbar text={props.text} setText={props.setText} />
         </div>
-        </form>
+      </form>
     );
-}
-
+  }
+  
 EditingArea.PropTypes = {
     text: PropTypes.string.isRequired,
     setText: PropTypes.func.isRequired,

@@ -7,10 +7,16 @@ export default function Toolbar(props) {
 
     return (
       <div className={classes["toolbar"]}>
-        <button onClick={() => setText("")} className={classes["clear-button"]}>
+        <button type="button" onClick={() => setText([])} className={classes["clear-button"]}>
           Clear
         </button>
-        <button onClick={() => localStorage.setItem("savedText", text)} className={classes["save-button"]}>
+        <button type="button" 
+            onClick={() => {
+                const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
+                savedList.push(text);
+                localStorage.setItem("savedTextList", JSON.stringify(savedList));
+              }}
+            className={classes["save-button"]}>
           Save
         </button>
       </div>

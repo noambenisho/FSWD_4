@@ -4,8 +4,8 @@ import { layouts } from "./keyboardLayouts";
 import classes from "../CSS/Keyboard.module.css";
 
 export default function Keyboard(props) {
-  const text = props.text;
-  const setText = props.setText;
+  const { text, setText, fontFamily, fontSize, color } = props;
+
 
   const [language, setLanguage] = useState("english");
   const [capsLock, setCapsLock] = useState(false);
@@ -18,7 +18,14 @@ export default function Keyboard(props) {
     } else if (char === "Caps") {
       setCapsLock(!capsLock);
     } else {
-      setText(text + (capsLock && language === "english" ? char.toUpperCase() : char));
+      const newChar = {
+        char: capsLock && language === "english" ? char.toUpperCase() : char,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        color: color
+      };
+      setText([...text, newChar]);
+      
     }
   };
 

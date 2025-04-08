@@ -8,10 +8,20 @@ export default function TextEditor(props) {
     return (
     <p className={classes["text-editor"]}>
       <label htmlFor="body">Text editor</label>
-      <textarea
-      value={text}
-      onChange={(e) => setText(e.target.value)}
-      required rows={3}/>
+      <div className={classes["display-box"]}>
+        {text.map((item, index) => (
+          <span
+            key={index}
+            style={{
+              fontFamily: item.fontFamily,
+              fontSize: item.fontSize,
+              color: item.color,
+            }}
+          >
+            {item.char}
+          </span>
+        ))}
+      </div>
     </p>
     );
   }

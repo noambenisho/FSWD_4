@@ -8,9 +8,22 @@ export default function TextDisplay(props) {
     return  (
     <>
     <label htmlFor="body">Text display</label>
-    <div className={classes.div}>{text}</div> 
+    <div className={classes.div}>
+      {text.map((item, index) => (
+        <span
+          key={index}
+          style={{
+            fontFamily: item.fontFamily,
+            fontSize: item.fontSize,
+            color: item.color
+          }}
+        >
+          {item.char}
+        </span>
+      ))}
+    </div>
     </>);
-  }
+  }  
  
   TextDisplay.PropTypes = {
     text: PropTypes.string.isRequired,
