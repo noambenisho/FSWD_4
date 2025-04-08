@@ -33,13 +33,6 @@ export default function FontControls() {
         />
       </div>
 
-      {/* Text Area */}
-      <textarea
-        rows={5}
-        className={styles.textarea}
-        style={{ fontFamily, fontSize, color }}
-        placeholder="Type something..."
-      />
     </div>
   );
 }

@@ -9,10 +9,10 @@ export default function EditingArea(props){
 
     return (
         <form className={classes.form}>
-        <p>
+        <div>
             <TextDisplay text={text} />
             <Toolbar text={text} setText={setText} />
-        </p>
+        </div>
         </form>
     );
 }
