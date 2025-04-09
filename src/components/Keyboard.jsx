@@ -4,13 +4,15 @@ import { layouts } from "./keyboardLayouts";
 import classes from "../CSS/Keyboard.module.css";
 
 export default function Keyboard(props) {
-  const { text, setText, fontFamily, fontSize, color } = props;
+  const { text, setText, fontFamily, fontSize, color, disabled } = props;
 
 
   const [language, setLanguage] = useState("english");
   const [capsLock, setCapsLock] = useState(false);
 
   const handleKeyPress = (char) => {
+    if (disabled) return;
+
     if (char === "⌫") {
       setText(text.slice(0, -1));
     } else if (char === "Space") {
@@ -30,7 +32,7 @@ export default function Keyboard(props) {
   };
 
   return (
-    <div className={classes["keyboard-container"]}>
+    <div className={`${classes["keyboard-container"]} ${disabled ? classes["disabled"] : ""}`}>
       <div className={classes["language-buttons"]}>
         <button onClick={() => setLanguage("english")} className={classes["language-buttons"]}>EN</button>
         <button onClick={() => setLanguage("hebrew")} className={classes["language-buttons"]}>HE</button>
@@ -58,10 +60,19 @@ export default function Keyboard(props) {
     </div>
   );
 }
-// This component renders a keyboard interface with buttons for each character.
-// It allows the user to type in different languages (English, Hebrew, Emoji) and includes a Caps Lock feature.
 
-Keyboard.PropTypes = {
-  text: PropTypes.string.isRequired,
+Keyboard.propTypes = {
+  text: PropTypes.arrayOf(
+    PropTypes.shape({
+      char: PropTypes.string.isRequired,
+      fontFamily: PropTypes.string.isRequired,
+      fontSize: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   setText: PropTypes.func.isRequired,
-}
+  fontFamily: PropTypes.string.isRequired,
+  fontSize: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+};

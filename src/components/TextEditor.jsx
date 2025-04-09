@@ -8,7 +8,9 @@ export default function TextEditor(props) {
     return (
     <p className={classes["text-editor"]}>
       <label htmlFor="body">Text editor</label>
-      <div className={classes["display-box"]}>
+      <div className={`${classes["display-box"]} ${
+          props.disabled ? classes["disabled"] : ""
+        }`}>
         {text.map((item, index) => (
           <span
             key={index}
@@ -25,8 +27,16 @@ export default function TextEditor(props) {
     </p>
     );
   }
-
-  TextEditor.PropTypes = {
-    text: PropTypes.string.isRequired,
+  
+  TextEditor.propTypes = {
+    text: PropTypes.arrayOf(
+      PropTypes.shape({
+        char: PropTypes.string.isRequired,
+        fontFamily: PropTypes.string.isRequired,
+        fontSize: PropTypes.string.isRequired,
+        color: PropTypes.string.isRequired,
+      })
+    ).isRequired,
     setText: PropTypes.func.isRequired,
-}
+    disabled: PropTypes.bool,
+  };
