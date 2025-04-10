@@ -35,15 +35,15 @@ export default function App() {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="space-x-2">
-        <button onClick={addTextDisplay} className="bg-blue-500 text-white px-4 py-2 rounded">
+    <div >
+      <div>
+        <button onClick={addTextDisplay} >
           Add TextDisplay
         </button>
         {selectedIndex !== null && (
           <button
             onClick={() => removeTextDisplay(selectedIndex)}
-            className="bg-red-500 text-white px-4 py-2 rounded"
+            
           >
             Remove Selected
           </button>
@@ -51,7 +51,7 @@ export default function App() {
       </div>
 
       {/* Display all TextDisplays */}
-      <div className="space-y-4">
+      <div >
         {textDisplays.map((text, index) => (
           <div
             key={index}

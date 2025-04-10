@@ -16,7 +16,15 @@ export default function Keyboard(props) {
     if (char === "⌫") {
       setText(text.slice(0, -1));
     } else if (char === "Space") {
-      setText(text + " ");
+      setText([
+        ...text,
+        {
+          char: " ",
+          fontFamily: fontFamily,
+          fontSize: fontSize,
+          color: color
+        }
+      ]);    
     } else if (char === "Caps") {
       setCapsLock(!capsLock);
     } else {

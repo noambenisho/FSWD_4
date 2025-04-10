@@ -6,7 +6,7 @@ export default function TextEditor(props) {
     const setText = props.setText;
 
     return (
-    <p className={classes["text-editor"]}>
+    <div className={classes["text-editor"]}>
       <label htmlFor="body">Text editor</label>
       <div className={`${classes["display-box"]} ${
           props.disabled ? classes["disabled"] : ""
@@ -24,7 +24,7 @@ export default function TextEditor(props) {
           </span>
         ))}
       </div>
-    </p>
+    </div>
     );
   }
   
