@@ -1,0 +1,60 @@
+.saved-list-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100vh;
+    background-color: #f3f3f3;
+    border-left: 2px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .saved-list-panel h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+  }
+  
+  .saved-list-panel button {
+    display: block;
+    margin-bottom: 8px;
+    width: 100%;
+    background-color: #e0f0ff;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    text-align: right;
+    border-radius: 5px;
+  }
+  
+  .saved-list-panel button:hover {
+    background-color: #cce5ff;
+  }
+  
+  .saved-item {
+    margin-bottom: 8px;
+  }
+  
+  .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .title-button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #007bff;
+    text-align: left;
+    cursor: pointer;
+    padding: 4px;
+  }
+  
+  .edit-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: gray;
+    padding-left: 6px;
+  }  

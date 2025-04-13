@@ -5,13 +5,13 @@ import classes from '../CSS/TextDisplay.module.css';
 import Toolbar from './Toolbar';
 
 export default function TextDisplay(props) {
-  const text = props.text;
+  const { text, setText, isSelected } = props;
 
   return (
-    <div className={`${classes.container} ${props.isSelected ? classes.selected : ""}`}>
-      <label htmlFor="body">Text display</label>
+    <div className={`${classes.container} ${isSelected ? classes.selected : ""}`}>
+      <label htmlFor="body">{text.title}</label>
       <div className={classes.div}>
-        {text.map((item, index) => (
+        {Array.isArray(text.text) && text.text.map((item, index) => (
           <span
             key={index}
             style={{
@@ -24,20 +24,23 @@ export default function TextDisplay(props) {
           </span>
         ))}
       </div>
-      <Toolbar text={text} setText={props.setText} />
+      <Toolbar text={text.text} setText={(newText) => setText({ ...text, text: newText })} />
     </div>
   );
 }
 
 TextDisplay.PropTypes = {
-  text: PropTypes.arrayOf(
-    PropTypes.shape({
-      char: PropTypes.string.isRequired,
-      fontFamily: PropTypes.string,
-      fontSize: PropTypes.string,
-      color: PropTypes.string,
-    })
-  ).isRequired,
+  text: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    text: PropTypes.arrayOf(
+      PropTypes.shape({
+        char: PropTypes.string.isRequired,
+        fontFamily: PropTypes.string,
+        fontSize: PropTypes.string,
+        color: PropTypes.string,
+      })
+    ).isRequired,
+  }).isRequired,
   setText: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
-  
