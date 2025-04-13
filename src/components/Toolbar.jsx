@@ -13,7 +13,10 @@ export default function Toolbar(props) {
         <button type="button" 
             onClick={() => {
                 const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
-                savedList.push(text);
+                savedList.push({ 
+                  savedAt: new Date().toISOString(),
+                  content: text
+                });                
                 localStorage.setItem("savedTextList", JSON.stringify(savedList));
               }}
             className={classes["save-button"]}>
@@ -24,6 +27,6 @@ export default function Toolbar(props) {
   }
   
 Toolbar.PropTypes = {
-    text: PropTypes.string.isRequired,
+    text: PropTypes.array.isRequired,
     setText: PropTypes.func.isRequired,
 }

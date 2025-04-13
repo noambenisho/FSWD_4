@@ -34,6 +34,13 @@ export default function App() {
     setTextDisplays(updated);
   };
 
+  const updateTextAtIndex = (index, newText) => {
+    const updated = [...textDisplays];
+    updated[index] = newText;
+    setTextDisplays(updated);
+  };
+  
+
   return (
     <div >
       <div>
@@ -60,7 +67,12 @@ export default function App() {
               selectedIndex === index ? "border-blue-500" : "border-gray-300"
             }`}
           >
-            <TextDisplay text={text} />
+            <TextDisplay 
+              text={text} 
+              setText={(newText) => updateTextAtIndex(index, newText)} 
+              index={index}
+              isSelected={selectedIndex === index}
+            />
           </div>
         ))}
       </div>
