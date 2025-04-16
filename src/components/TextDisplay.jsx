@@ -5,7 +5,7 @@ import classes from '../CSS/TextDisplay.module.css';
 import Toolbar from './Toolbar';
 
 export default function TextDisplay(props) {
-  const { text, setText, isSelected } = props;
+  const { text, setText, isSelected, onSave } = props;
 
   return (
     <div className={`${classes.container} ${isSelected ? classes.selected : ""}`}>
@@ -18,13 +18,12 @@ export default function TextDisplay(props) {
               fontFamily: item.fontFamily,
               fontSize: item.fontSize,
               color: item.color
-            }}
-          >
+            }}>
             {item.char}
           </span>
         ))}
       </div>
-      <Toolbar text={text.text} setText={(newText) => setText({ ...text, text: newText })} />
+      <Toolbar text={text.text} setText={(newText) => setText({ ...text, text: newText })} onSave={onSave} />
     </div>
   );
 }

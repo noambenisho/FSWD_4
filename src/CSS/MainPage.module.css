@@ -9,10 +9,10 @@
   .main-area {
     flex: 1;
     display: grid;
-    grid-template-rows: 0.05fr 0.4fr 0.1fr 0.15fr 0.3fr; /* סה"כ 1fr */
+    grid-template-rows: 0.08fr 0.3fr 0.1fr 0.2fr 0.4fr; /* סה"כ 1fr */
     flex-direction: column;
     overflow: hidden;
-    padding: 0; /* או 0.5rem אם חייב */
+    padding: 0; 
     gap: 0.5rem;
   }
   
@@ -68,9 +68,14 @@
   }
   
   .right-panel {
-    width: 250px;
+    width: 200px;
     border-left: 1px solid #ccc;
     padding: 1rem;
     overflow-y: auto;
     background-color: #fafafa;
   }
+
+  h3 {
+    justify-self: center;
+  }
+  

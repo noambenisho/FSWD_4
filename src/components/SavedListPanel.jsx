@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Pencil } from 'lucide-react'; 
-import '../CSS/SavedListPanel.module.css';
+import classes from '../CSS/SavedListPanel.module.css';
 
-export default function SavedListPanel({ savedTitles, setSavedTitles, onRestore }) {
+export default function SavedListPanel(prop) {
+  const { savedTitles, setSavedTitles, onRestore } = prop;
   const [editIndex, setEditIndex] = useState(null);
   const [editTitle, setEditTitle] = useState("");
 
@@ -26,7 +27,7 @@ export default function SavedListPanel({ savedTitles, setSavedTitles, onRestore 
   };
 
   return (
-    <div className="saved-list-panel">
+    <div className={classes["saved-list-panel"]}>
       <h3>Recent</h3>
       {savedTitles.length === 0 && <p>No saved texts</p>}
       {savedTitles.map((item, index) => (
@@ -41,7 +42,7 @@ export default function SavedListPanel({ savedTitles, setSavedTitles, onRestore 
               autoFocus
             />
           ) : (
-            <div className="title-row">
+            <div className={classes["title-row"]}>
               <button
                 className="title-button"
                 onClick={() => onRestore(item.content)}
@@ -49,7 +50,7 @@ export default function SavedListPanel({ savedTitles, setSavedTitles, onRestore 
                 {item.content.title || `No title ${index + 1}`}
               </button>
               <button
-                className="edit-icon"
+                className={classes["edit-icon"]}
                 onClick={() => handleTitleEdit(index, item.content.title)}
                 title="edit title"
               >

@@ -28,32 +28,35 @@ export default function MainPage() {
     setSelectedIndex(textDisplays.length);
   };
 
+  const saveTextDisplayAtIndex = (index) => {
+    const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
+    const currentItem = textDisplays[index];
+  
+    const existingIndex = savedList.findIndex(item => item.content.title === currentItem.title);
+  
+    let updatedSaved;
+    if (existingIndex !== -1) {
+      savedList[existingIndex] = {
+        savedAt: new Date().toISOString(),
+        content: currentItem
+      };
+      updatedSaved = [...savedList];
+    } else {
+      updatedSaved = [...savedList, {
+        savedAt: new Date().toISOString(),
+        content: currentItem
+      }];
+    }
+  
+    localStorage.setItem("savedTextList", JSON.stringify(updatedSaved));
+    setSavedTitles(updatedSaved);
+  };  
+
   const removeTextDisplay = (index) => {
     const shouldSave = window.confirm("Do you want to save this text before closing?");
     if (shouldSave) {
-      const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
-      const currentItem = textDisplays[index];
-  
-      // Check if the item already exists in the saved list
-      const existingIndex = savedList.findIndex(item => item.content.title === currentItem.title);
-  
-      let updatedSaved;
-      if (existingIndex !== -1) { // if it exists, update it
-        savedList[existingIndex] = {
-          savedAt: new Date().toISOString(),
-          content: currentItem
-        };
-        updatedSaved = [...savedList];
-      } else { // if it doesn't exist, add it
-        updatedSaved = [...savedList, {
-          savedAt: new Date().toISOString(),
-          content: currentItem
-        }];
-      }
-  
-      localStorage.setItem("savedTextList", JSON.stringify(updatedSaved));
-      setSavedTitles(updatedSaved);
-    }
+      saveTextDisplayAtIndex(index);
+    }    
   
     const updated = [...textDisplays];
     updated.splice(index, 1);
@@ -74,69 +77,16 @@ export default function MainPage() {
   };
 
   const handleRestore = (textObject) => {
-    const updated = [...textDisplays, textObject];
-    setTextDisplays(updated);
+    const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
+    const found = savedList.find(item => item.content.title === textObject.title); // find the saved text by title
+
+    if (found) {
+      const updated = [...textDisplays, found.content];
+      setTextDisplays(updated);
+    }
   };
   
   return (
-    // <div className={classes.container}>
-    //   <div style={{ display: 'flex', flexDirection: 'row', direction: 'ltr' }}>
-    //     <div style={{ flex: 1 }}>
-    //       <div>
-    //         <button onClick={addTextDisplay} >
-    //         Add TextDisplay
-    //         </button>
-    //         {selectedIndex !== null && (
-    //           <button onClick={() => removeTextDisplay(selectedIndex)}>
-    //             Remove Selected
-    //           </button>
-    //         )}
-    //       </div>
-          
-    //       {/* Display all TextDisplays */}
-    //       <div >
-    //         {textDisplays.map((text, index) => (
-    //           <div
-    //             key={index}
-    //             onClick={() => setSelectedIndex(index)}
-    //             className={`border p-2 rounded cursor-pointer ${
-    //             selectedIndex === index ? "border-blue-500" : "border-gray-300"
-    //             }`}
-    //           >
-    //             <TextDisplay 
-    //               text={text} 
-    //               setText={(newText) => updateTextAtIndex(index, newText)} 
-    //               index={index}
-    //               isSelected={selectedIndex === index}
-    //             />
-    //           </div>
-    //         ))}
-    //       </div>
-    //       <FontControls 
-    //         setFontFamily={setFontFamily} 
-    //         setFontSize={setFontSize} 
-    //         setColor={setColor} 
-    //       />
-    //       <TextEditor 
-    //         text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
-    //       setText={updateText}
-    //         disabled={selectedIndex === null}
-    //       />
-    //       <Keyboard
-    //         text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
-    //       setText={updateText}
-    //       fontFamily={fontFamily}
-    //       fontSize={fontSize}
-    //       color={color}
-    //         disabled={selectedIndex === null}
-    //       />
-    //     </div>
-    //   </div>  
-    //   <div style={{ justifyItems: 'center', width: '200px', padding: '1rem' }}>
-    //     <SavedListPanel savedTitles={savedTitles} setSavedTitles={setSavedTitles} onRestore={handleRestore} />
-    //   </div>
-    // </div>
-
     <div className={classes["app-container"]}>
       {/* אזור ראשי - עורך, מקלדת, טקסטים */}
       <div className={classes["main-area"]}>
@@ -148,21 +98,19 @@ export default function MainPage() {
           )}
         </div>
         
-        {/* אזור גריד של כל TextDisplays */}
+        {/* גריד של כל TextDisplays */}
         <div className={classes["grid-area"]}>
           {textDisplays.map((text, index) => (
             <div
               key={index}
               onClick={() => setSelectedIndex(index)}
-              className={`${classes["text-display-box"]} ${
-                selectedIndex === index ? classes["selected"] : ""
-              }`}
-            >
+              className={`${classes["text-display-box"]} ${selectedIndex === index ? classes["selected"] : ""}`}>
               <TextDisplay 
                 text={text} 
                 setText={(newText) => updateTextAtIndex(index, newText)} 
                 index={index}
                 isSelected={selectedIndex === index}
+                onSave={() => saveTextDisplayAtIndex(index)}
               />
             </div>
           ))}
@@ -196,7 +144,7 @@ export default function MainPage() {
         </div>
       </div>
         
-      {/* לוח שמור בצד ימין */}
+      {/* לוח שמורים בצד ימין */}
       <div className={classes["right-panel"]}>
         <SavedListPanel 
           savedTitles={savedTitles} 
