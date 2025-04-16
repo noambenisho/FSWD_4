@@ -7,6 +7,7 @@ import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
 import classes from '../CSS/MainPage.module.css';
 
+
 export default function MainPage() {
   //const username = localStorage.getItem('currentUser');
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
@@ -136,10 +137,11 @@ export default function MainPage() {
     //   </div>
     // </div>
 
-    <div className="app-container">
+    <div className={classes["app-container"]}>
       {/* אזור ראשי - עורך, מקלדת, טקסטים */}
-      <div className="main-area">
-        <div className="controls">
+      <div className={classes["main-area"]}>
+
+        <div className={classes["controls"]}>
           <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
             <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
@@ -147,13 +149,13 @@ export default function MainPage() {
         </div>
         
         {/* אזור גריד של כל TextDisplays */}
-        <div className="grid-area">
+        <div className={classes["grid-area"]}>
           {textDisplays.map((text, index) => (
             <div
               key={index}
               onClick={() => setSelectedIndex(index)}
-              className={`text-display-box ${
-                selectedIndex === index ? "selected" : ""
+              className={`${classes["text-display-box"]} ${
+                selectedIndex === index ? classes["selected"] : ""
               }`}
             >
               <TextDisplay 
@@ -166,37 +168,42 @@ export default function MainPage() {
           ))}
         </div>
         
-        {/* אזור שליטה על פונטים ועריכה */}
-        <FontControls 
-          setFontFamily={setFontFamily} 
-          setFontSize={setFontSize} 
-          setColor={setColor} 
-        />
+        <div className={classes["font-controls"]}>
+          <FontControls 
+            setFontFamily={setFontFamily} 
+            setFontSize={setFontSize} 
+            setColor={setColor} 
+          />
+        </div>
 
-        <TextEditor 
-          text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
-          setText={updateText}
-          disabled={selectedIndex === null}
-        />
+        <div className={classes["text-editor"]}>
+          <TextEditor 
+            text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
+            setText={updateText}
+            disabled={selectedIndex === null}
+          />
+        </div>
 
-        <Keyboard
-          text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
-          setText={updateText}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
-          color={color}
-          disabled={selectedIndex === null}
-        />
+        <div className={classes["keyboard"]}>
+          <Keyboard
+            text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
+            setText={updateText}
+            fontFamily={fontFamily}
+            fontSize={fontSize}
+            color={color}
+            disabled={selectedIndex === null}
+          />
+        </div>
       </div>
         
       {/* לוח שמור בצד ימין */}
-      <div className="right-panel">
+      <div className={classes["right-panel"]}>
         <SavedListPanel 
           savedTitles={savedTitles} 
           setSavedTitles={setSavedTitles} 
           onRestore={handleRestore} 
         />
       </div>
-    </div>    
+    </div>  
   );
 }
