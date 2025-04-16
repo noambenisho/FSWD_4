@@ -5,9 +5,9 @@ import TextEditor from "./TextEditor";
 import TextDisplay from "./TextDisplay";
 import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
-import classes from '../CSS/MainPage.module.css'
+import classes from '../CSS/MainPage.module.css';
 
-export default function App() {
+export default function MainPage() {
   //const username = localStorage.getItem('currentUser');
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
   const [selectedIndex, setSelectedIndex] = useState(null); // currently selected display
@@ -78,27 +78,82 @@ export default function App() {
   };
   
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', direction: 'ltr' }}>
-      <div style={{ flex: 1 }}>
-        <div>
-          <button onClick={addTextDisplay} >
-          Add TextDisplay
-          </button>
+    // <div className={classes.container}>
+    //   <div style={{ display: 'flex', flexDirection: 'row', direction: 'ltr' }}>
+    //     <div style={{ flex: 1 }}>
+    //       <div>
+    //         <button onClick={addTextDisplay} >
+    //         Add TextDisplay
+    //         </button>
+    //         {selectedIndex !== null && (
+    //           <button onClick={() => removeTextDisplay(selectedIndex)}>
+    //             Remove Selected
+    //           </button>
+    //         )}
+    //       </div>
+          
+    //       {/* Display all TextDisplays */}
+    //       <div >
+    //         {textDisplays.map((text, index) => (
+    //           <div
+    //             key={index}
+    //             onClick={() => setSelectedIndex(index)}
+    //             className={`border p-2 rounded cursor-pointer ${
+    //             selectedIndex === index ? "border-blue-500" : "border-gray-300"
+    //             }`}
+    //           >
+    //             <TextDisplay 
+    //               text={text} 
+    //               setText={(newText) => updateTextAtIndex(index, newText)} 
+    //               index={index}
+    //               isSelected={selectedIndex === index}
+    //             />
+    //           </div>
+    //         ))}
+    //       </div>
+    //       <FontControls 
+    //         setFontFamily={setFontFamily} 
+    //         setFontSize={setFontSize} 
+    //         setColor={setColor} 
+    //       />
+    //       <TextEditor 
+    //         text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
+    //       setText={updateText}
+    //         disabled={selectedIndex === null}
+    //       />
+    //       <Keyboard
+    //         text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
+    //       setText={updateText}
+    //       fontFamily={fontFamily}
+    //       fontSize={fontSize}
+    //       color={color}
+    //         disabled={selectedIndex === null}
+    //       />
+    //     </div>
+    //   </div>  
+    //   <div style={{ justifyItems: 'center', width: '200px', padding: '1rem' }}>
+    //     <SavedListPanel savedTitles={savedTitles} setSavedTitles={setSavedTitles} onRestore={handleRestore} />
+    //   </div>
+    // </div>
+
+    <div className="app-container">
+      {/* אזור ראשי - עורך, מקלדת, טקסטים */}
+      <div className="main-area">
+        <div className="controls">
+          <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
-            <button onClick={() => removeTextDisplay(selectedIndex)}>
-              Remove Selected
-            </button>
+            <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
           )}
         </div>
-
-        {/* Display all TextDisplays */}
-        <div >
+        
+        {/* אזור גריד של כל TextDisplays */}
+        <div className="grid-area">
           {textDisplays.map((text, index) => (
             <div
               key={index}
               onClick={() => setSelectedIndex(index)}
-              className={`border p-2 rounded cursor-pointer ${
-              selectedIndex === index ? "border-blue-500" : "border-gray-300"
+              className={`text-display-box ${
+                selectedIndex === index ? "selected" : ""
               }`}
             >
               <TextDisplay 
@@ -110,29 +165,38 @@ export default function App() {
             </div>
           ))}
         </div>
+        
+        {/* אזור שליטה על פונטים ועריכה */}
         <FontControls 
           setFontFamily={setFontFamily} 
           setFontSize={setFontSize} 
           setColor={setColor} 
         />
+
         <TextEditor 
           text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
-        setText={updateText}
+          setText={updateText}
           disabled={selectedIndex === null}
         />
+
         <Keyboard
           text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
-        setText={updateText}
-        fontFamily={fontFamily}
-        fontSize={fontSize}
-        color={color}
+          setText={updateText}
+          fontFamily={fontFamily}
+          fontSize={fontSize}
+          color={color}
           disabled={selectedIndex === null}
         />
       </div>
-
-      <div style={{ justifyItems: 'center', width: '200px', padding: '1rem' }}>
-        <SavedListPanel savedTitles={savedTitles} setSavedTitles={setSavedTitles} onRestore={handleRestore} />
+        
+      {/* לוח שמור בצד ימין */}
+      <div className="right-panel">
+        <SavedListPanel 
+          savedTitles={savedTitles} 
+          setSavedTitles={setSavedTitles} 
+          onRestore={handleRestore} 
+        />
       </div>
-    </div>
+    </div>    
   );
 }

@@ -1,7 +1,8 @@
 /* need to 
 1) background-image:none;
-2) apply that to the mainPage, before it was the App.css
-.app {
+2) apply that to the mainPage, before it was the App.css */
+
+/* .app {
     max-width: 800px;
     margin: 2rem auto;
     padding: 1rem;
@@ -23,4 +24,86 @@
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
-  }*/
+  } */
+
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #CAF0F8;
+  }
+  
+  .app-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    direction: ltr; 
+  }
+  
+  .main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    overflow: hidden;
+  }
+  
+  .right-panel {
+    width: 250px;
+    background-color: #ADE8F4;
+    padding: 1rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .grid-area {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 1rem;
+    overflow: auto;
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .text-display-box {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    border: 3px solid #48CAE4;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #ffffff;
+    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s, border 0.3s;
+  }
+  
+  .text-display-box:hover {
+    transform: scale(1.02);
+    border: 3px solid #0077B6;
+  }
+  
+  .text-display-box.selected {
+    border: 4px solid #03045E;
+  }
+  
+  /* חלקים נוספים */
+  .editor-section, .keyboard-section {
+    flex-shrink: 0;
+  }
+  
