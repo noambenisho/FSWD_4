@@ -8,7 +8,7 @@ export default function FontControls(props) {
     const updated = [...props.textDisplays];
     const text = [...updated[props.selectedIndex].text];
 
-    for (let i = props.selectedRange.start; i <= props.selectedRange.end; i++) {
+    for (let i = props.selectedRange.start + 1; i <= props.selectedRange.end; i++) {
       text[i] = { ...text[i], [key]: value };
     }
 

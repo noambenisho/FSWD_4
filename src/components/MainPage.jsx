@@ -5,10 +5,15 @@ import TextEditor from "./TextEditor";
 import TextDisplay from "./TextDisplay";
 import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
+import { LogOut } from "lucide-react";
 import classes from '../CSS/MainPage.module.css';
 
 
 export default function MainPage({ switchTo }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [replaceQuery, setReplaceQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]); // Holds indices of found matches
+
   const username = localStorage.getItem('currentUser');
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
   const [selectedIndex, setSelectedIndex] = useState(null); // currently selected display
@@ -93,6 +98,44 @@ export default function MainPage({ switchTo }) {
       setTextDisplays(updated);
     }
   };
+  const handleSearch = () => {
+    if (!searchQuery.trim()) return;
+  
+    const results = [];
+    textDisplays.forEach((display, displayIndex) => {
+      display.text.forEach((charObj, charIndex) => {
+        if (charObj.char === searchQuery) {
+          results.push({ displayIndex, charIndex });
+        }
+      });
+    });
+  
+    setSearchResults(results);
+  };
+
+  const handleReplaceAll = () => {
+    if (!searchQuery.trim()) return;
+  
+    const updated = [...textDisplays];
+    let replaced = false;
+  
+    updated.forEach((display, dIndex) => {
+      display.text = display.text.map((charObj) => {
+        if (charObj.char === searchQuery) {
+          replaced = true;
+          return { ...charObj, char: replaceQuery };
+        }
+        return charObj;
+      });
+    });
+  
+    if (replaced) {
+      setTextDisplays(updated);
+      setSearchQuery(""); // Optional: reset input
+      setReplaceQuery("");
+      setSearchResults([]);
+    }
+  };
   
   return (
     <div className={classes["app-container"]}>
@@ -100,11 +143,34 @@ export default function MainPage({ switchTo }) {
       <div className={classes["main-area"]}>
 
         <div className={classes["controls"]}>
-          <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white">
+          <LogOut className="w-5 h-5" />
+        </button>
           <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
             <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
           )}
+          <div className={classes["search-controls"]}>
+          <input
+            type="text"
+            placeholder="Search char..."
+            value={searchQuery}
+            maxLength={1}
+            onChange={(e) => setSearchQuery(e.target.value.slice(0, 1))}
+          />
+
+          <input
+            type="text"
+            placeholder="Replace with..."
+            value={replaceQuery}
+            maxLength={1}
+            onChange={(e) => setReplaceQuery(e.target.value.slice(0, 1))}
+          />
+
+            <button onClick={handleSearch}>Search</button>
+            <button onClick={handleReplaceAll}>Replace All</button>
+          </div>
+
         </div>
         
         {/* גריד של כל TextDisplays */}
@@ -124,7 +190,9 @@ export default function MainPage({ switchTo }) {
                 isSelected={selectedIndex === index}
                 setSelectedRange={setSelectedRange}
                 onSave={() => saveTextDisplayAtIndex(index)}
+                searchResults={searchResults.filter(r => r.displayIndex === index)} // Pass filtered matches
               />
+
             </div>
           ))}
         </div>
