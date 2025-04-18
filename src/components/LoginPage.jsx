@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import classes from '../CSS/user.module.css';
 
-const LoginPage = () => {
-  const navigate = useNavigate();
+const LoginPage = ({ switchTo }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    const users = JSON.parse(localStorage.getItem('users')) || {};
-    const blockedUsers = JSON.parse(localStorage.getItem('blockedUsers')) || {};
-    const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('blockedUsers', JSON.stringify(blockedUsers));
-    localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
-  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,7 +21,7 @@ const LoginPage = () => {
       localStorage.setItem('currentUser', username);
       loginAttempts[username] = 0;
       localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
-      navigate('/main');
+      switchTo('main');
     } else {
       loginAttempts[username] = (loginAttempts[username] || 0) + 1;
       localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
@@ -51,11 +40,10 @@ const LoginPage = () => {
 
   return (
     <div className={classes.wrapper}>
-      <form id="loginForm" onSubmit={handleLogin}>
+      <form onSubmit={handleLogin}>
         <h1>Login</h1>
         <div className={classes.inputBox}>
           <input
-            id="username"
             type="text"
             placeholder="Username"
             required
@@ -65,7 +53,6 @@ const LoginPage = () => {
         </div>
         <div className={classes.inputBox}>
           <input
-            id="password"
             type="password"
             placeholder="Password"
             required
@@ -73,9 +60,9 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button className={classes.btn} onClick={handleLogin}>Login</button>
+        <button type="submit" className={classes.btn}>Login</button>
         <div className={classes.link}>
-          <p>Don't have an account? <a href="#" onClick={() => navigate('/register')}>Register</a></p>
+          <p>Don't have an account? <a href="#" onClick={() => switchTo('register')}>Register</a></p>
         </div>
       </form>
     </div>

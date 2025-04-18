@@ -65,10 +65,10 @@
   
   .right-panel {
     width: 200px;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid #030000;
     padding: 1rem;
     overflow-y: auto;
-    background-color: #fafafa;
+    background-color: #080000;
   }
 
   h3 {

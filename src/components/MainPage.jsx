@@ -8,8 +8,8 @@ import '../CSS/SavedListPanel.module.css';
 import classes from '../CSS/MainPage.module.css';
 
 
-export default function MainPage() {
-  //const username = localStorage.getItem('currentUser');
+export default function MainPage({ switchTo }) {
+  const username = localStorage.getItem('currentUser');
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
   const [selectedIndex, setSelectedIndex] = useState(null); // currently selected display
   const [temp, setTemp] = useState(1); 
@@ -20,6 +20,11 @@ export default function MainPage() {
   const [fontFamily, setFontFamily] = useState("Arial");
   const [fontSize, setFontSize] = useState("16px");
   const [color, setColor] = useState("#000000");
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    switchTo('login');
+  };
 
   const addTextDisplay = () => {
     if (textDisplays.length >= 5) return;
@@ -95,6 +100,7 @@ export default function MainPage() {
       <div className={classes["main-area"]}>
 
         <div className={classes["controls"]}>
+          <button onClick={handleLogout}>Logout</button>
           <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
             <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
@@ -153,10 +159,12 @@ export default function MainPage() {
             disabled={selectedIndex === null}
           />
         </div>
+
       </div>
         
-      {/* לוח שמורים בצד ימין */}
+      {/* Right side panel */}
       <div className={classes["right-panel"]}>
+        
         <SavedListPanel 
           savedTitles={savedTitles} 
           setSavedTitles={setSavedTitles} 
