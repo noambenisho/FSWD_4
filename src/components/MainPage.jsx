@@ -16,6 +16,7 @@ export default function MainPage() {
   const [savedTitles, setSavedTitles] = useState(() => JSON.parse(localStorage.getItem("savedTextList")) || []);
 
   // font settings for the selected display
+  const [selectedRange, setSelectedRange] = useState(null);
   const [fontFamily, setFontFamily] = useState("Arial");
   const [fontSize, setFontSize] = useState("16px");
   const [color, setColor] = useState("#000000");
@@ -26,6 +27,7 @@ export default function MainPage() {
     const newDisplay = { title: `#${temp}`, text: [] };
     setTextDisplays([...textDisplays, newDisplay]);
     setSelectedIndex(textDisplays.length);
+    setSelectedRange(null);
   };
 
   const saveTextDisplayAtIndex = (index) => {
@@ -57,11 +59,14 @@ export default function MainPage() {
     if (shouldSave) {
       saveTextDisplayAtIndex(index);
     }    
+    
+    console.log("Selected range:", selectedRange);
   
     const updated = [...textDisplays];
     updated.splice(index, 1);
     setTextDisplays(updated);
     setSelectedIndex(null);
+    setSelectedRange(null);
   };
   
   const updateText = (newText) => {
@@ -103,13 +108,17 @@ export default function MainPage() {
           {textDisplays.map((text, index) => (
             <div
               key={index}
-              onClick={() => setSelectedIndex(index)}
+              onClick={() => {
+                setSelectedIndex(index);
+                setSelectedRange(null); // reset selected range when selecting a new text display
+              }}              
               className={`${classes["text-display-box"]} ${selectedIndex === index ? classes["selected"] : ""}`}>
               <TextDisplay 
                 text={text} 
                 setText={(newText) => updateTextAtIndex(index, newText)} 
                 index={index}
                 isSelected={selectedIndex === index}
+                setSelectedRange={setSelectedRange}
                 onSave={() => saveTextDisplayAtIndex(index)}
               />
             </div>
@@ -118,9 +127,13 @@ export default function MainPage() {
         
         <div className={classes["font-controls"]}>
           <FontControls 
+            selectedRange={selectedRange}
             setFontFamily={setFontFamily} 
             setFontSize={setFontSize} 
             setColor={setColor} 
+            textDisplays={textDisplays}
+            setTextDisplays={setTextDisplays}
+            selectedIndex={selectedIndex}
           />
         </div>
 
