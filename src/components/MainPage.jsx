@@ -59,8 +59,6 @@ export default function MainPage() {
     if (shouldSave) {
       saveTextDisplayAtIndex(index);
     }    
-    
-    console.log("Selected range:", selectedRange);
   
     const updated = [...textDisplays];
     updated.splice(index, 1);
