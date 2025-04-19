@@ -51,7 +51,7 @@ export default function TextDisplay(props) {
   );
 }
 
-TextDisplay.PropTypes = {
+TextDisplay.propTypes = {
   text: PropTypes.shape({
     title: PropTypes.string.isRequired,
     text: PropTypes.arrayOf(

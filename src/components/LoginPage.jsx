@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import classes from '../CSS/user.module.css';
 
 const LoginPage = ({ switchTo }) => {
@@ -70,3 +71,8 @@ const LoginPage = ({ switchTo }) => {
 };
 
 export default LoginPage;
+
+
+LoginPage.propTypes = {
+  switchTo: PropTypes.func.isRequired,
+};

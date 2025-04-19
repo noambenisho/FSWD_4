@@ -26,6 +26,9 @@ export default function MainPage({ switchTo }) {
   const [fontSize, setFontSize] = useState("16px");
   const [color, setColor] = useState("#000000");
 
+  // History management
+  const [history, setHistory] = useState([]); // History for each text display
+
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     switchTo('login');
@@ -36,6 +39,7 @@ export default function MainPage({ switchTo }) {
     setTemp(temp + 1);
     const newDisplay = { title: `#${temp}`, text: [] };
     setTextDisplays([...textDisplays, newDisplay]);
+    setHistory([...history, []]); // Initialize an empty history for this new display
     setSelectedIndex(textDisplays.length);
     setSelectedRange(null);
   };
@@ -77,10 +81,34 @@ export default function MainPage({ switchTo }) {
     setSelectedRange(null);
   };
   
+  // Update text with history tracking
   const updateText = (newText) => {
-    const updated = [...textDisplays];
-    updated[selectedIndex].text = newText;
-    setTextDisplays(updated);
+    if (selectedIndex === null) return;
+
+    const updatedDisplays = [...textDisplays];
+    const updatedHistory = [...history];
+
+    // Save current text to history before updating
+    updatedHistory[selectedIndex].push(textDisplays[selectedIndex].text);
+
+    updatedDisplays[selectedIndex].text = newText;
+    setTextDisplays(updatedDisplays);
+    setHistory(updatedHistory);
+  };
+
+  // Undo the last change
+  const undoText = () => {
+    if (selectedIndex === null || history[selectedIndex].length === 0) return;
+
+    const updatedDisplays = [...textDisplays];
+    const updatedHistory = [...history];
+
+    // Revert to the last state from the history
+    const lastState = updatedHistory[selectedIndex].pop();
+    updatedDisplays[selectedIndex].text = lastState;
+
+    setTextDisplays(updatedDisplays);
+    setHistory(updatedHistory);
   };
 
   const updateTextAtIndex = (index, newText) => {
@@ -131,12 +159,13 @@ export default function MainPage({ switchTo }) {
   
     if (replaced) {
       setTextDisplays(updated);
-      setSearchQuery(""); // Optional: reset input
+      setSearchQuery(""); // reset input
       setReplaceQuery("");
       setSearchResults([]);
     }
   };
-  
+ 
+
   return (
     <div className={classes["app-container"]}>
       {/* אזור ראשי - עורך, מקלדת, טקסטים */}
@@ -149,6 +178,9 @@ export default function MainPage({ switchTo }) {
           <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
             <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
+          )}
+          {selectedIndex !== null && (
+            <button onClick={() => undoText()}>Undo</button> 
           )}
           <div className={classes["search-controls"]}>
           <input
@@ -198,15 +230,18 @@ export default function MainPage({ switchTo }) {
         </div>
         
         <div className={classes["font-controls"]}>
-          <FontControls 
-            selectedRange={selectedRange}
-            setFontFamily={setFontFamily} 
-            setFontSize={setFontSize} 
-            setColor={setColor} 
-            textDisplays={textDisplays}
-            setTextDisplays={setTextDisplays}
-            selectedIndex={selectedIndex}
-          />
+        <FontControls
+          selectedIndex={selectedIndex}
+          selectedRange={selectedRange}
+          textDisplays={textDisplays}
+          setTextDisplays={setTextDisplays}
+          setHistory={setHistory}
+          history={history}
+          setFontFamily={setFontFamily}
+          setFontSize={setFontSize}
+          setColor={setColor}
+        />
+
         </div>
 
         <div className={classes["text-editor"]}>
