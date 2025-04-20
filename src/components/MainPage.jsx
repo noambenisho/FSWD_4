@@ -17,7 +17,10 @@ export default function MainPage({ switchTo }) {
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
   const [selectedIndex, setSelectedIndex] = useState(null); // currently selected display
   const [temp, setTemp] = useState(1); 
-  const [savedTitles, setSavedTitles] = useState(() => JSON.parse(localStorage.getItem("savedTextList")) || []);
+  const [savedTitles, setSavedTitles] = useState(() => 
+    JSON.parse(localStorage.getItem(`savedTextList_${username}`)) || []
+  );
+  
 
   // font settings for the selected display
   const [selectedRange, setSelectedRange] = useState(null);
@@ -44,7 +47,8 @@ export default function MainPage({ switchTo }) {
   };
 
   const saveTextDisplayAtIndex = (index) => {
-    const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
+    const key = `savedTextList_${username}`;
+    const savedList = JSON.parse(localStorage.getItem(key)) || [];
     const currentItem = textDisplays[index];
   
     const existingIndex = savedList.findIndex(item => item.content.title === currentItem.title);
@@ -63,9 +67,10 @@ export default function MainPage({ switchTo }) {
       }];
     }
   
-    localStorage.setItem("savedTextList", JSON.stringify(updatedSaved));
+    localStorage.setItem(key, JSON.stringify(updatedSaved));
     setSavedTitles(updatedSaved);
-  };  
+  };
+  
 
   const removeTextDisplay = (index) => {
     const shouldSave = window.confirm("Do you want to save this text before closing?");
@@ -117,14 +122,15 @@ export default function MainPage({ switchTo }) {
   };
 
   const handleRestore = (textObject) => {
-    const savedList = JSON.parse(localStorage.getItem("savedTextList")) || [];
-    const found = savedList.find(item => item.content.title === textObject.title); // find the saved text by title
-
+    const savedList = JSON.parse(localStorage.getItem(`savedTextList_${username}`)) || [];
+    const found = savedList.find(item => item.content.title === textObject.title);
+  
     if (found) {
       const updated = [...textDisplays, found.content];
       setTextDisplays(updated);
     }
   };
+  
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
   
