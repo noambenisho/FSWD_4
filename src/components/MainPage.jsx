@@ -7,7 +7,6 @@ import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
 import classes from '../CSS/MainPage.module.css';
 
-
 export default function MainPage({ switchTo }) {
   const username = localStorage.getItem('currentUser');
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
