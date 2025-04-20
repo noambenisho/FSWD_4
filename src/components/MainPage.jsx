@@ -34,7 +34,7 @@ export default function MainPage({ switchTo }) {
   };
 
   const addTextDisplay = () => {
-    if (textDisplays.length >= 5) return;
+    if (textDisplays.length >= 13) return;
     setTemp(temp + 1);
     const newDisplay = { title: `#${temp}`, text: [] };
     setTextDisplays([...textDisplays, newDisplay]);
@@ -217,8 +217,10 @@ export default function MainPage({ switchTo }) {
               <TextDisplay 
                 text={text} 
                 setText={(newText) => updateTextAtIndex(index, newText)} 
+                updateText={(newText) => updateText(newText)}
                 index={index}
                 isSelected={selectedIndex === index}
+                selectedRange={selectedRange}
                 setSelectedRange={setSelectedRange}
                 onSave={() => saveTextDisplayAtIndex(index)}
                 searchResults={searchResults.filter(r => r.displayIndex === index)} // Pass filtered matches

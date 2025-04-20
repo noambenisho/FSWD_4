@@ -5,7 +5,7 @@ import classes from '../CSS/TextDisplay.module.css';
 import Toolbar from './Toolbar';
 
 export default function TextDisplay(props) {
-  const{ text, setText, index, isSelected, setSelectedRange, onSave, searchResults = [] } = props;
+  const{ text, setText, index, isSelected, selectedRange, setSelectedRange, onSave, searchResults = [], updateText } = props;
   const highlightIndices = new Set(searchResults.map(r => r.charIndex));
   // Add event listeners for mouse events to handle text selection
   const handleMouseUp = () => {
@@ -21,10 +21,18 @@ export default function TextDisplay(props) {
       const start = Math.min(Number(anchorSpan.dataset.index), Number(focusSpan.dataset.index));
       const end = Math.max(Number(anchorSpan.dataset.index), Number(focusSpan.dataset.index));
   
-      props.setSelectedRange({ start, end });
+      setSelectedRange({ start, end });
     }, 0); // Delay to ensure selection is updated
   };
   
+  const handleDelete = () => {
+    if (selectedRange && updateText) {
+      const { start, end } = selectedRange;
+      const updatedText = text.text.filter((_, i) => i < start || i > end);
+      updateText(updatedText);
+      setSelectedRange(null);
+    }
+  };
 
   return (
     <div className={`${classes.container} ${isSelected ? classes.selected : ""}`}>
@@ -45,7 +53,9 @@ export default function TextDisplay(props) {
           </span>
         ))}
       </div>
-
+      <button onClick={handleDelete} className={classes.deleteButton}>
+        Delete Selected Text
+      </button>
       <Toolbar text={text.text} setText={(newText) => setText({ ...text, text: newText })} onSave={onSave} />
     </div>
   );
