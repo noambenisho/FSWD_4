@@ -6,6 +6,10 @@
     color: #000; 
     min-height: 2rem;
     margin-bottom: 0.5rem;
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: pre-wrap;
 }
 
 .container {

@@ -9,7 +9,7 @@
   .main-area {
     flex: 1;
     display: grid;
-    grid-template-rows: 0.06fr 0.28fr 0.1fr 0.2fr 0.4fr; /* סה"כ 1fr */
+    grid-template-rows: 0.06fr 0.28fr 0.1fr 0.21fr 0.4fr; /* סה"כ 1fr */
     flex-direction: column;
     overflow: hidden;
     padding: 0; 
