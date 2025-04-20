@@ -279,6 +279,7 @@ export default function MainPage({ switchTo }) {
           savedTitles={savedTitles} 
           setSavedTitles={setSavedTitles} 
           onRestore={handleRestore} 
+          username={username}
         />
       </div>
     </div>  

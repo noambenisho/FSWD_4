@@ -3,7 +3,7 @@ import { Pencil } from 'lucide-react';
 import classes from '../CSS/SavedListPanel.module.css';
 
 export default function SavedListPanel(prop) {
-  const { savedTitles, setSavedTitles, onRestore } = prop;
+  const { savedTitles, setSavedTitles, onRestore, username } = prop;
   const [editIndex, setEditIndex] = useState(null);
   const [editTitle, setEditTitle] = useState("");
 
@@ -15,7 +15,7 @@ export default function SavedListPanel(prop) {
   const handleTitleSave = (index) => {
     const updated = [...savedTitles];
     updated[index].content.title = editTitle.trim() || `No title ${index + 1}`;
-    localStorage.setItem("savedTextList", JSON.stringify(updated));
+localStorage.setItem(`savedTextList_${username}`, JSON.stringify(updated));
     setSavedTitles(updated);
     setEditIndex(null);
   };
