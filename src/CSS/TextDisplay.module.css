@@ -24,3 +24,18 @@
     border-color: lightblue;
     background-color: #55bdf1;
 }
+
+.deleteButton {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c0392b;
+  }
+  
