@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import classes from '../CSS/user.module.css';
+import PropTypes from 'prop-types';
 
 const Registration = ({ switchTo }) => {
   const [username, setUsername] = useState('');
@@ -53,3 +54,7 @@ const Registration = ({ switchTo }) => {
 };
 
 export default Registration;
+
+Registration.propTypes = {
+    switchTo: PropTypes.func.isRequired,
+};

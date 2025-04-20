@@ -5,8 +5,8 @@ import classes from '../CSS/TextDisplay.module.css';
 import Toolbar from './Toolbar';
 
 export default function TextDisplay(props) {
-  const { text, setText, isSelected, onSave } = props;
-
+  const{ text, setText, index, isSelected, setSelectedRange, onSave, searchResults = [] } = props;
+  const highlightIndices = new Set(searchResults.map(r => r.charIndex));
   // Add event listeners for mouse events to handle text selection
   const handleMouseUp = () => {
     setTimeout(() => {
@@ -37,18 +37,21 @@ export default function TextDisplay(props) {
             style={{
               fontFamily: item.fontFamily,
               fontSize: item.fontSize,
-              color: item.color
-            }}>
+              color: item.color,
+              backgroundColor: highlightIndices.has(index) ? 'yellow' : 'transparent'
+            }}
+          >
             {item.char}
           </span>
         ))}
       </div>
+
       <Toolbar text={text.text} setText={(newText) => setText({ ...text, text: newText })} onSave={onSave} />
     </div>
   );
 }
 
-TextDisplay.PropTypes = {
+TextDisplay.propTypes = {
   text: PropTypes.shape({
     title: PropTypes.string.isRequired,
     text: PropTypes.arrayOf(

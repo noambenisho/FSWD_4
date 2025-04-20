@@ -16,7 +16,8 @@ export default function Toolbar(props) {
     );
   }
   
-Toolbar.PropTypes = {
+Toolbar.propTypes = {
     text: PropTypes.array.isRequired,
     setText: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
 }

@@ -5,9 +5,14 @@ import TextEditor from "./TextEditor";
 import TextDisplay from "./TextDisplay";
 import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
+import { LogOut } from "lucide-react";
 import classes from '../CSS/MainPage.module.css';
 
 export default function MainPage({ switchTo }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [replaceQuery, setReplaceQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]); // Holds indices of found matches
+
   const username = localStorage.getItem('currentUser');
   const [textDisplays, setTextDisplays] = useState([]); // holds list of text states
   const [selectedIndex, setSelectedIndex] = useState(null); // currently selected display
@@ -20,6 +25,9 @@ export default function MainPage({ switchTo }) {
   const [fontSize, setFontSize] = useState("16px");
   const [color, setColor] = useState("#000000");
 
+  // History management
+  const [history, setHistory] = useState([]); // History for each text display
+
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     switchTo('login');
@@ -30,6 +38,7 @@ export default function MainPage({ switchTo }) {
     setTemp(temp + 1);
     const newDisplay = { title: `#${temp}`, text: [] };
     setTextDisplays([...textDisplays, newDisplay]);
+    setHistory([...history, []]); // Initialize an empty history for this new display
     setSelectedIndex(textDisplays.length);
     setSelectedRange(null);
   };
@@ -71,10 +80,34 @@ export default function MainPage({ switchTo }) {
     setSelectedRange(null);
   };
   
+  // Update text with history tracking
   const updateText = (newText) => {
-    const updated = [...textDisplays];
-    updated[selectedIndex].text = newText;
-    setTextDisplays(updated);
+    if (selectedIndex === null) return;
+
+    const updatedDisplays = [...textDisplays];
+    const updatedHistory = [...history];
+
+    // Save current text to history before updating
+    updatedHistory[selectedIndex].push(textDisplays[selectedIndex].text);
+
+    updatedDisplays[selectedIndex].text = newText;
+    setTextDisplays(updatedDisplays);
+    setHistory(updatedHistory);
+  };
+
+  // Undo the last change
+  const undoText = () => {
+    if (selectedIndex === null || history[selectedIndex].length === 0) return;
+
+    const updatedDisplays = [...textDisplays];
+    const updatedHistory = [...history];
+
+    // Revert to the last state from the history
+    const lastState = updatedHistory[selectedIndex].pop();
+    updatedDisplays[selectedIndex].text = lastState;
+
+    setTextDisplays(updatedDisplays);
+    setHistory(updatedHistory);
   };
 
   const updateTextAtIndex = (index, newText) => {
@@ -92,18 +125,83 @@ export default function MainPage({ switchTo }) {
       setTextDisplays(updated);
     }
   };
+  const handleSearch = () => {
+    if (!searchQuery.trim()) return;
   
+    const results = [];
+    textDisplays.forEach((display, displayIndex) => {
+      display.text.forEach((charObj, charIndex) => {
+        if (charObj.char === searchQuery) {
+          results.push({ displayIndex, charIndex });
+        }
+      });
+    });
+  
+    setSearchResults(results);
+  };
+
+  const handleReplaceAll = () => {
+    if (!searchQuery.trim()) return;
+  
+    const updated = [...textDisplays];
+    let replaced = false;
+  
+    updated.forEach((display, dIndex) => {
+      display.text = display.text.map((charObj) => {
+        if (charObj.char === searchQuery) {
+          replaced = true;
+          return { ...charObj, char: replaceQuery };
+        }
+        return charObj;
+      });
+    });
+  
+    if (replaced) {
+      setTextDisplays(updated);
+      setSearchQuery(""); // reset input
+      setReplaceQuery("");
+      setSearchResults([]);
+    }
+  };
+ 
+
   return (
     <div className={classes["app-container"]}>
       {/* אזור ראשי - עורך, מקלדת, טקסטים */}
       <div className={classes["main-area"]}>
 
         <div className={classes["controls"]}>
-          <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white">
+          <LogOut className="w-5 h-5" />
+        </button>
           <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
             <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
           )}
+          {selectedIndex !== null && (
+            <button onClick={() => undoText()}>Undo</button> 
+          )}
+          <div className={classes["search-controls"]}>
+          <input
+            type="text"
+            placeholder="Search char..."
+            value={searchQuery}
+            maxLength={1}
+            onChange={(e) => setSearchQuery(e.target.value.slice(0, 1))}
+          />
+
+          <input
+            type="text"
+            placeholder="Replace with..."
+            value={replaceQuery}
+            maxLength={1}
+            onChange={(e) => setReplaceQuery(e.target.value.slice(0, 1))}
+          />
+
+            <button onClick={handleSearch}>Search</button>
+            <button onClick={handleReplaceAll}>Replace All</button>
+          </div>
+
         </div>
         
         {/* גריד של כל TextDisplays */}
@@ -123,21 +221,26 @@ export default function MainPage({ switchTo }) {
                 isSelected={selectedIndex === index}
                 setSelectedRange={setSelectedRange}
                 onSave={() => saveTextDisplayAtIndex(index)}
+                searchResults={searchResults.filter(r => r.displayIndex === index)} // Pass filtered matches
               />
+
             </div>
           ))}
         </div>
         
         <div className={classes["font-controls"]}>
-          <FontControls 
-            selectedRange={selectedRange}
-            setFontFamily={setFontFamily} 
-            setFontSize={setFontSize} 
-            setColor={setColor} 
-            textDisplays={textDisplays}
-            setTextDisplays={setTextDisplays}
-            selectedIndex={selectedIndex}
-          />
+        <FontControls
+          selectedIndex={selectedIndex}
+          selectedRange={selectedRange}
+          textDisplays={textDisplays}
+          setTextDisplays={setTextDisplays}
+          setHistory={setHistory}
+          history={history}
+          setFontFamily={setFontFamily}
+          setFontSize={setFontSize}
+          setColor={setColor}
+        />
+
         </div>
 
         <div className={classes["text-editor"]}>
