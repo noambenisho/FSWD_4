@@ -5,11 +5,12 @@ import TextEditor from "./TextEditor";
 import TextDisplay from "./TextDisplay";
 import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
-import { LogOut } from "lucide-react";
+import { LogOut, Undo, Redo } from "lucide-react";
 import classes from '../CSS/MainPage.module.css';
 
 export default function MainPage({ switchTo }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchMessage, setSearchMessage] = useState("");
   const [replaceQuery, setReplaceQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]); // Holds indices of found matches
 
@@ -30,6 +31,7 @@ export default function MainPage({ switchTo }) {
 
   // History management
   const [history, setHistory] = useState([]); // History for each text display
+  const [redoHistory, setRedoHistory] = useState([]); // Parallel to history
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
@@ -42,6 +44,7 @@ export default function MainPage({ switchTo }) {
     const newDisplay = { title: `#${temp}`, text: [] };
     setTextDisplays([...textDisplays, newDisplay]);
     setHistory([...history, []]); // Initialize an empty history for this new display
+    setRedoHistory([...redoHistory, []]);
     setSelectedIndex(textDisplays.length);
     setSelectedRange(null);
   };
@@ -88,33 +91,58 @@ export default function MainPage({ switchTo }) {
   // Update text with history tracking
   const updateText = (newText) => {
     if (selectedIndex === null) return;
-
+  
     const updatedDisplays = [...textDisplays];
     const updatedHistory = [...history];
-
-    // Save current text to history before updating
+    const updatedRedo = [...redoHistory];
+  
     updatedHistory[selectedIndex].push(textDisplays[selectedIndex].text);
-
+    updatedRedo[selectedIndex] = []; // Clear redo stack
+  
     updatedDisplays[selectedIndex].text = newText;
     setTextDisplays(updatedDisplays);
     setHistory(updatedHistory);
+    setRedoHistory(updatedRedo);
   };
+  
 
   // Undo the last change
   const undoText = () => {
     if (selectedIndex === null || history[selectedIndex].length === 0) return;
-
+  
     const updatedDisplays = [...textDisplays];
     const updatedHistory = [...history];
-
+    const updatedRedo = [...redoHistory];
+    
     // Revert to the last state from the history
     const lastState = updatedHistory[selectedIndex].pop();
+    updatedRedo[selectedIndex].push(updatedDisplays[selectedIndex].text); // Save for redo
+  
     updatedDisplays[selectedIndex].text = lastState;
-
+  
     setTextDisplays(updatedDisplays);
     setHistory(updatedHistory);
+    setRedoHistory(updatedRedo);
   };
 
+  const redoText = () => {
+    if (selectedIndex === null || redoHistory[selectedIndex].length === 0) return;
+  
+    const updatedDisplays = [...textDisplays];
+    const updatedHistory = [...history];
+    const updatedRedo = [...redoHistory];
+  
+    const redoState = updatedRedo[selectedIndex].pop();
+    updatedHistory[selectedIndex].push(updatedDisplays[selectedIndex].text); // Save current to undo
+  
+    updatedDisplays[selectedIndex].text = redoState;
+  
+    setTextDisplays(updatedDisplays);
+    setHistory(updatedHistory);
+    setRedoHistory(updatedRedo);
+  };
+
+  
   const updateTextAtIndex = (index, newText) => {
     const updated = [...textDisplays];
     updated[index] = newText;
@@ -144,32 +172,44 @@ export default function MainPage({ switchTo }) {
     });
   
     setSearchResults(results);
+    setSearchMessage(`${results.length} match${results.length !== 1 ? "es" : ""} found.`);
   };
+  
 
   const handleReplaceAll = () => {
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim() || selectedIndex === null) return;
   
-    const updated = [...textDisplays];
+    const updatedDisplays = [...textDisplays];
+    const updatedHistory = [...history];
+  
+    // Save current state to history before modifying
+    const currentText = textDisplays[selectedIndex].text;
+    updatedHistory[selectedIndex] = [...updatedHistory[selectedIndex], [...currentText]];
+  
     let replaced = false;
   
-    updated.forEach((display, dIndex) => {
-      display.text = display.text.map((charObj) => {
-        if (charObj.char === searchQuery) {
-          replaced = true;
-          return { ...charObj, char: replaceQuery };
-        }
-        return charObj;
-      });
+    updatedDisplays[selectedIndex].text = updatedDisplays[selectedIndex].text.map((charObj) => {
+      if (charObj.char === searchQuery) {
+        replaced = true;
+        return { ...charObj, char: replaceQuery };
+      }
+      return charObj;
     });
   
     if (replaced) {
-      setTextDisplays(updated);
-      setSearchQuery(""); // reset input
+      setTextDisplays(updatedDisplays);
+      setHistory(updatedHistory);
+      setSearchQuery("");
       setReplaceQuery("");
       setSearchResults([]);
+      setSearchMessage("");
     }
   };
- 
+  
+  
+  const canUndo = selectedIndex !== null && history[selectedIndex]?.length > 0;
+  const canRedo = selectedIndex !== null && redoHistory[selectedIndex]?.length > 0;
+
 
   return (
     <div className={classes["app-container"]}>
@@ -185,16 +225,43 @@ export default function MainPage({ switchTo }) {
             <button onClick={() => removeTextDisplay(selectedIndex)}>Remove Selected</button>
           )}
           {selectedIndex !== null && (
-            <button onClick={() => undoText()}>Undo</button> 
+            <button
+              onClick={undoText}
+              className={`${classes["undo-redo-button"]} ${classes["undo-button"]}`}
+              title="Undo"
+              disabled={!canUndo}
+            >
+              <Undo size={20} />
+            </button>
           )}
+          {selectedIndex !== null && (
+            <button
+              onClick={redoText}
+              className={`${classes["undo-redo-button"]} ${classes["redo-button"]}`}
+              title="Redo"
+              disabled={!canRedo}
+            >
+              <Redo size={20} />
+            </button>
+          
+          )}
+
           <div className={classes["search-controls"]}>
           <input
-            type="text"
-            placeholder="Search char..."
-            value={searchQuery}
-            maxLength={1}
-            onChange={(e) => setSearchQuery(e.target.value.slice(0, 1))}
-          />
+          type="text"
+          placeholder="Search char..."
+          value={searchQuery}
+          maxLength={1}
+          onChange={(e) => {
+            const value = e.target.value.slice(0, 1);
+            setSearchQuery(value);
+
+            if (value === "") {
+              setSearchResults([]);
+              setSearchMessage("");
+            }
+          }}
+        />
 
           <input
             type="text"
@@ -203,6 +270,7 @@ export default function MainPage({ switchTo }) {
             maxLength={1}
             onChange={(e) => setReplaceQuery(e.target.value.slice(0, 1))}
           />
+            {searchMessage && <div className={classes["search-message"]}>{searchMessage}</div>}
 
             <button onClick={handleSearch}>Search</button>
             <button onClick={handleReplaceAll}>Replace All</button>

@@ -109,3 +109,41 @@
     background-color: #0056b3;
   }
   
+  .search-message {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #4b5563; 
+  }
+  .undo-redo-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    color: white;
+  }
+  
+  .undo-button {
+    background-color: #000;
+  }
+  
+  .undo-button:hover {
+    background-color: #000;
+  }
+  
+  .redo-button {
+    background-color: #000;
+  }
+  
+  .redo-button:hover {
+    background-color: #000;
+  }
+  
+  .undo-redo-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
