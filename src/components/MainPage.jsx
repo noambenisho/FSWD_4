@@ -22,7 +22,6 @@ export default function MainPage({ switchTo }) {
     JSON.parse(localStorage.getItem(`savedTextList_${username}`)) || []
   );
   
-
   // font settings for the selected display
   const [selectedRange, setSelectedRange] = useState(null);
   const [fontFamily, setFontFamily] = useState("Arial");
@@ -32,6 +31,8 @@ export default function MainPage({ switchTo }) {
   // History management
   const [history, setHistory] = useState([]); // History for each text display
   const [redoHistory, setRedoHistory] = useState([]); // Parallel to history
+
+  const [typingTarget, setTypingTarget] = useState("editor"); // "editor", "search", or "replace"
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
@@ -248,28 +249,31 @@ export default function MainPage({ switchTo }) {
 
           <div className={classes["search-controls"]}>
           <input
-          type="text"
-          placeholder="Search char..."
-          value={searchQuery}
-          maxLength={1}
-          onChange={(e) => {
-            const value = e.target.value.slice(0, 1);
-            setSearchQuery(value);
+            type="text"
+            placeholder="Search char..."
+            value={searchQuery}
+            maxLength={1}
+            onClick={() => setTypingTarget("search")}
+            onChange={(e) => {
+              const value = e.target.value.slice(0, 1);
+              setSearchQuery(value);
 
-            if (value === "") {
-              setSearchResults([]);
-              setSearchMessage("");
-            }
-          }}
-        />
+              if (value === "") {
+                setSearchResults([]);
+                setSearchMessage("");
+              }
+            }}
+          />
 
           <input
             type="text"
             placeholder="Replace with..."
             value={replaceQuery}
             maxLength={1}
+            onClick={() => setTypingTarget("replace")}
             onChange={(e) => setReplaceQuery(e.target.value.slice(0, 1))}
           />
+
             {searchMessage && <div className={classes["search-message"]}>{searchMessage}</div>}
 
             <button onClick={handleSearch}>Search</button>
@@ -286,6 +290,7 @@ export default function MainPage({ switchTo }) {
               onClick={() => {
                 setSelectedIndex(index);
                 setSelectedRange(null); // reset selected range when selecting a new text display
+                setTypingTarget("editor");
               }}              
               className={`${classes["text-display-box"]} ${selectedIndex === index ? classes["selected"] : ""}`}>
               <TextDisplay 
@@ -324,18 +329,25 @@ export default function MainPage({ switchTo }) {
             text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
             setText={updateText}
             disabled={selectedIndex === null}
+            setTypingTarget={setTypingTarget}
           />
         </div>
 
         <div className={classes["keyboard"]}>
-          <Keyboard
-            text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
-            setText={updateText}
-            fontFamily={fontFamily}
-            fontSize={fontSize}
-            color={color}
-            disabled={selectedIndex === null}
-          />
+        <Keyboard
+          text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
+          setText={updateText}
+          fontFamily={fontFamily}
+          fontSize={fontSize}
+          color={color}
+          disabled={selectedIndex === null}
+          typingTarget={typingTarget}
+          setSearchQuery={setSearchQuery}
+          searchQuery={searchQuery}
+          setReplaceQuery={setReplaceQuery}
+          replaceQuery={replaceQuery}
+        />
+
         </div>
 
       </div>
