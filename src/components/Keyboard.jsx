@@ -4,7 +4,7 @@ import { layouts } from "./keyboardLayouts";
 import classes from "../CSS/Keyboard.module.css";
 
 export default function Keyboard(props) {
-  const { text, setText, fontFamily, fontSize, color, disabled, typingTarget, setSearchQuery, searchQuery, setReplaceQuery, replaceQuery } = props;
+  const { text, setText, fontFamily, fontSize, color, disabled, typingTarget, setSearchQuery, searchQuery, setReplaceQuery, replaceQuery, setSearchResults, setSearchMessage } = props;
 
 
   const [language, setLanguage] = useState("english");
@@ -16,6 +16,8 @@ export default function Keyboard(props) {
     if (char === "⌫") {
       if (typingTarget === "search") {
         setSearchQuery(searchQuery.slice(0, -1));
+        setSearchResults([]);
+        setSearchMessage("");
       } else if (typingTarget === "replace") {
         setReplaceQuery(replaceQuery.slice(0, -1));
       } else {

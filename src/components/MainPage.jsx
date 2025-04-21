@@ -346,6 +346,8 @@ export default function MainPage({ switchTo }) {
           searchQuery={searchQuery}
           setReplaceQuery={setReplaceQuery}
           replaceQuery={replaceQuery}
+          setSearchResults={setSearchResults}
+          setSearchMessage={setSearchMessage}
         />
 
         </div>
