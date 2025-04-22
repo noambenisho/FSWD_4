@@ -18,12 +18,12 @@
   .saved-list-panel button {
     display: block;
     margin-bottom: 8px;
-    width: 100%;
+    width: fit-content;
     background-color: #e0f0ff;
     border: none;
     padding: 8px;
     cursor: pointer;
-    text-align: right;
+    text-align: left;
     border-radius: 5px;
   }
   
@@ -46,7 +46,7 @@
     background: none;
     border: none;
     color: #007bff;
-    text-align: left;
+    direction: rtl;
     cursor: pointer;
     padding: 4px;
   }
