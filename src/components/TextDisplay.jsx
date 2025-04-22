@@ -1,7 +1,7 @@
 
 // This component receives a `text` prop and displays it inside a styled div.
 import PropTypes from 'prop-types';
-import classes from '../CSS/TextDisplay.module.css';
+import styles from '../CSS/TextDisplay.module.css';
 import Toolbar from './Toolbar';
 
 export default function TextDisplay(props) {
@@ -35,9 +35,9 @@ export default function TextDisplay(props) {
   };
 
   return (
-    <div className={`${classes.container} ${isSelected ? classes.selected : ""}`}>
+    <div className={`${styles.container} ${isSelected ? styles.selected : ""}`}>
       <label htmlFor="body">{text.title}</label>
-      <div className={classes.div} onMouseUp={handleMouseUp}>
+      <div className={styles.div} onMouseUp={handleMouseUp}>
         {Array.isArray(text.text) && text.text.map((item, index) => (
           <span
             key={index}
@@ -53,7 +53,7 @@ export default function TextDisplay(props) {
           </span>
         ))}
       </div>
-      <button onClick={handleDelete} className={classes.deleteButton}>
+      <button onClick={handleDelete} className={styles.deleteButton}>
         Delete Selected Text
       </button>
       <Toolbar text={text.text} setText={(newText) => setText({ ...text, text: newText })} onSave={onSave} />

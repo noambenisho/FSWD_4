@@ -6,7 +6,7 @@ import TextDisplay from "./TextDisplay";
 import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
 import { LogOut, Undo, Redo } from "lucide-react";
-import classes from '../CSS/MainPage.module.css';
+import styles from '../CSS/MainPage.module.css';
 
 export default function MainPage({ switchTo }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -223,13 +223,13 @@ export default function MainPage({ switchTo }) {
 
 
   return (
-    <div className={classes["app-container"]}>
-      {/* אזור ראשי - עורך, מקלדת, טקסטים */}
-      <div className={classes["main-area"]}>
+    <div className={styles["app-container"]}>
+      {/* main area */}
+      <div className={styles["main-area"]}>
 
-        <div className={classes["controls"]}>
+        <div className={styles["controls"]}>
         <button onClick={handleLogout} >
-          <LogOut className="w-5 h-5" />
+          <LogOut />
         </button>
           <button onClick={addTextDisplay}>Add TextDisplay</button>
           {selectedIndex !== null && (
@@ -238,7 +238,7 @@ export default function MainPage({ switchTo }) {
           {selectedIndex !== null && (
             <button
               onClick={undoText}
-              className={`${classes["undo-redo-button"]} ${classes["undo-button"]}`}
+              className={`${styles["undo-redo-button"]} ${styles["undo-button"]}`}
               title="Undo"
               disabled={!canUndo}
             >
@@ -248,7 +248,7 @@ export default function MainPage({ switchTo }) {
           {selectedIndex !== null && (
             <button
               onClick={redoText}
-              className={`${classes["undo-redo-button"]} ${classes["redo-button"]}`}
+              className={`${styles["undo-redo-button"]} ${styles["redo-button"]}`}
               title="Redo"
               disabled={!canRedo}
             >
@@ -257,7 +257,7 @@ export default function MainPage({ switchTo }) {
           
           )}
 
-          <div className={classes["search-controls"]}>
+          <div className={styles["search-controls"]}>
           <input
             type="text"
             placeholder="Search char..."
@@ -284,7 +284,7 @@ export default function MainPage({ switchTo }) {
             onChange={(e) => setReplaceQuery(e.target.value.slice(0, 1))}
           />
 
-            {searchMessage && <div className={classes["search-message"]}>{searchMessage}</div>}
+            {searchMessage && <div className={styles["search-message"]}>{searchMessage}</div>}
 
             <button onClick={handleSearch}>Search</button>
             <button onClick={handleReplaceAll}>Replace All</button>
@@ -292,8 +292,7 @@ export default function MainPage({ switchTo }) {
 
         </div>
         
-        {/* גריד של כל TextDisplays */}
-        <div className={classes["grid-area"]}>
+        <div className={styles["grid-area"]}>
           {textDisplays.map((text, index) => (
             <div
               key={index}
@@ -302,7 +301,7 @@ export default function MainPage({ switchTo }) {
                 setSelectedRange(null); // reset selected range when selecting a new text display
                 setTypingTarget("editor");
               }}              
-              className={`${classes["text-display-box"]} ${selectedIndex === index ? classes["selected"] : ""}`}>
+              className={`${styles["text-display-box"]} ${selectedIndex === index ? styles["selected"] : ""}`}>
               <TextDisplay 
                 text={text} 
                 setText={(newText) => updateTextAtIndex(index, newText)} 
@@ -319,7 +318,7 @@ export default function MainPage({ switchTo }) {
           ))}
         </div>
         
-        <div className={classes["font-controls"]}>
+        <div className={styles["font-controls"]}>
         <FontControls
           selectedIndex={selectedIndex}
           selectedRange={selectedRange}
@@ -334,7 +333,7 @@ export default function MainPage({ switchTo }) {
 
         </div>
 
-        <div className={classes["text-editor"]}>
+        <div className={styles["text-editor"]}>
           <TextEditor 
             text={selectedIndex !== null ? textDisplays[selectedIndex].text : []} 
             setText={updateText}
@@ -343,7 +342,7 @@ export default function MainPage({ switchTo }) {
           />
         </div>
 
-        <div className={classes["keyboard"]}>
+        <div className={styles["keyboard"]}>
         <Keyboard
           text={selectedIndex !== null ? textDisplays[selectedIndex].text : []}
           setText={updateText}
@@ -365,7 +364,7 @@ export default function MainPage({ switchTo }) {
       </div>
         
       {/* Right side panel */}
-      <div className={classes["right-panel"]}>
+      <div className={styles["right-panel"]}>
         
         <SavedListPanel 
           savedTitles={savedTitles} 

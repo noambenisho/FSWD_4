@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from "react";
 import { layouts } from "./keyboardLayouts";
-import classes from "../CSS/Keyboard.module.css";
+import styles from "../CSS/Keyboard.module.css";
 
 export default function Keyboard(props) {
   const { text, setText, fontFamily, fontSize, color, disabled, typingTarget, setSearchQuery, searchQuery, setReplaceQuery, replaceQuery, setSearchResults, setSearchMessage } = props;
@@ -55,24 +55,24 @@ export default function Keyboard(props) {
   
 
   return (
-    <div className={`${classes["keyboard-container"]} ${disabled ? classes["disabled"] : ""}`}>
-      <div className={classes["language-buttons"]}>
-        <button onClick={() => setLanguage("english")} className={classes["language-buttons"]}>EN</button>
-        <button onClick={() => setLanguage("hebrew")} className={classes["language-buttons"]}>HE</button>
-        <button onClick={() => setLanguage("emoji")} className={classes["language-buttons"]}>😀</button>
+    <div className={`${styles["keyboard-container"]} ${disabled ? styles["disabled"] : ""}`}>
+      <div className={styles["language-buttons"]}>
+        <button onClick={() => setLanguage("english")} className={styles["language-buttons"]}>EN</button>
+        <button onClick={() => setLanguage("hebrew")} className={styles["language-buttons"]}>HE</button>
+        <button onClick={() => setLanguage("emoji")} className={styles["language-buttons"]}>😀</button>
       </div>
 
-      <div className={["classes.keyboard-layouts"]}>
+      <div className={styles["keyboard-layouts"]}>
         {layouts[language].map((row, rowIndex) => (
-          <div key={rowIndex} className={["classes.keyboard-row"]}>
+          <div key={rowIndex} className={styles["keyboard-row"]}>
             {row.split(" ").map((char, index) => (
               <button 
                 key={index} 
                 onClick={() => handleKeyPress(char)}
-                className={`${classes["keyboard-key"]} 
-                ${char === "Space" ? classes.space : ""} 
-                ${char === "⌫" ? classes.delete : ""} 
-                ${char === "Caps" ? classes.capslock : ""}`
+                className={`${styles["keyboard-key"]} 
+                ${char === "Space" ? styles.space : ""} 
+                ${char === "⌫" ? styles.delete : ""} 
+                ${char === "Caps" ? styles.capslock : ""}`
               }>
                 {char === "Space" ? "␣" : capsLock && language === "english" ? char.toUpperCase() : char}
               </button>

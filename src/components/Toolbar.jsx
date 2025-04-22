@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
-import classes from '../CSS/Toolbar.module.css';
+import styles from '../CSS/Toolbar.module.css';
 
 export default function Toolbar(props) {
     const {text, setText, onSave} = props;
 
     return (
-      <div className={classes["toolbar"]}>
-        <button type="button" onClick={() => setText([])} className={classes["clear-button"]}>
+      <div className={styles["toolbar"]}>
+        <button type="button" onClick={() => setText([])} className={styles["clear-button"]}>
           Clear
         </button>
-        <button type="button" onClick={onSave} className={classes["save-button"]}>
+        <button type="button" onClick={onSave} className={styles["save-button"]}>
           Save
         </button>
       </div>

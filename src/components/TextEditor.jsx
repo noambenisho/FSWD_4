@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import classes from '../CSS/TextEditor.module.css';
+import styles from '../CSS/TextEditor.module.css';
 
 export default function TextEditor(props) {
   const { text, setText, disabled, setTypingTarget } = props;
 
   return (
-    <div className={classes["text-editor"]}>
+    <div className={styles["text-editor"]}>
       <label htmlFor="body">Text editor</label>
       <div
-        className={`${classes["display-box"]} ${disabled ? classes["disabled"] : ""}`}
+        className={`${styles["display-box"]} ${disabled ? styles["disabled"] : ""}`}
         onClick={() => {
           if (setTypingTarget) setTypingTarget("editor");
         }}

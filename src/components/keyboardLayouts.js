@@ -7,8 +7,8 @@ export const layouts = {
     ],
     hebrew: [
       "ק ר א ט ו ן ם פ ⌫",
-      "ש ד ג כ ע י ח ל",
-      "ז ס ב ה נ מ צ ת",
+      "ש ד ג כ ע י ח ל ך ף",
+      "ז ס ב ה נ מ צ ת ץ",
       "Space" 
     ],
     emoji: [
@@ -18,4 +18,3 @@ export const layouts = {
       "Space" 
     ]
   };
-  

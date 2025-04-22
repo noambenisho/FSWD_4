@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import classes from '../CSS/user.module.css';
+import styles from '../CSS/user.module.css';
 
 const LoginPage = ({ switchTo }) => {
   const [username, setUsername] = useState('');
@@ -40,10 +40,10 @@ const LoginPage = ({ switchTo }) => {
   };
 
   return (
-    <div className={classes.wrapper}>
+    <div className={styles.wrapper}>
       <form onSubmit={handleLogin}>
         <h1>Login</h1>
-        <div className={classes.inputBox}>
+        <div className={styles.inputBox}>
           <input
             type="text"
             placeholder="Username"
@@ -52,7 +52,7 @@ const LoginPage = ({ switchTo }) => {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className={classes.inputBox}>
+        <div className={styles.inputBox}>
           <input
             type="password"
             placeholder="Password"
@@ -61,8 +61,8 @@ const LoginPage = ({ switchTo }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className={classes.btn}>Login</button>
-        <div className={classes.link}>
+        <button type="submit" className={styles.btn}>Login</button>
+        <div className={styles.link}>
           <p>Don't have an account? <a href="#" onClick={() => switchTo('register')}>Register</a></p>
         </div>
       </form>
