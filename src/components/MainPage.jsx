@@ -77,7 +77,6 @@ export default function MainPage(props) {
     setSavedTitles(updatedSaved);
   };
   
-
   const removeTextDisplay = (index) => {
     const shouldSave = window.confirm("Do you want to save this text before closing?");
     if (shouldSave) {
@@ -108,7 +107,6 @@ export default function MainPage(props) {
     setRedoHistory(updatedRedo);
   };
   
-
   // Undo the last change
   const undoText = () => {
     if (selectedIndex === null || history[selectedIndex].length === 0) return;
@@ -145,7 +143,6 @@ export default function MainPage(props) {
     setRedoHistory(updatedRedo);
   };
 
-  
   const updateTextAtIndex = (index, newText) => {
     const updated = [...textDisplays];
     updated[index] = newText;
@@ -154,8 +151,6 @@ export default function MainPage(props) {
 
   const addExistingTextDisplay = (existingDisplay) => {
     if (textDisplays.length >= 13) return;
-  
-    setTemp(temp + 1);
   
     setTextDisplays(prev => [...prev, existingDisplay]);
     setHistory(prev => [...prev, []]); // Initialize empty history
@@ -219,10 +214,8 @@ export default function MainPage(props) {
     }
   };
   
-  
   const canUndo = selectedIndex !== null && history[selectedIndex]?.length > 0;
   const canRedo = selectedIndex !== null && redoHistory[selectedIndex]?.length > 0;
-
 
   return (
     <div className={styles["app-container"]}>
@@ -256,7 +249,6 @@ export default function MainPage(props) {
             >
               <Redo size={20} />
             </button>
-          
           )}
 
           <div className={styles["search-controls"]}>
@@ -360,14 +352,11 @@ export default function MainPage(props) {
           setSearchResults={setSearchResults}
           setSearchMessage={setSearchMessage}
         />
-
         </div>
-
       </div>
         
       {/* Right side panel */}
       <div className={styles["right-panel"]}>
-        
         <SavedListPanel 
           savedTitles={savedTitles} 
           setSavedTitles={setSavedTitles} 

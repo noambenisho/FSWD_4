@@ -1,4 +1,3 @@
-
 // This component receives a `text` prop and displays it inside a styled div.
 import PropTypes from 'prop-types';
 import styles from '../CSS/TextDisplay.module.css';
