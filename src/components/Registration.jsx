@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styles from '../CSS/user.module.css';
 import PropTypes from 'prop-types';
 
-const Registration = ({ switchTo }) => {
+const Registration = (props) => {
+  const { switchTo } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
