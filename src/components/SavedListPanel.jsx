@@ -15,7 +15,7 @@ export default function SavedListPanel(prop) {
   const handleTitleSave = (index) => {
     const updated = [...savedTitles];
     updated[index].content.title = editTitle.trim() || `No title ${index + 1}`;
-localStorage.setItem(`savedTextList_${username}`, JSON.stringify(updated));
+    localStorage.setItem(`savedTextList_${username}`, JSON.stringify(updated));
     setSavedTitles(updated);
     setEditIndex(null);
   };

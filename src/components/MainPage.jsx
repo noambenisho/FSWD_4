@@ -150,13 +150,24 @@ export default function MainPage({ switchTo }) {
     setTextDisplays(updated);
   };
 
+  const addExistingTextDisplay = (existingDisplay) => {
+    if (textDisplays.length >= 13) return;
+  
+    setTemp(temp + 1);
+  
+    setTextDisplays(prev => [...prev, existingDisplay]);
+    setHistory(prev => [...prev, []]); // Initialize empty history
+    setRedoHistory(prev => [...prev, []]);
+    setSelectedIndex(textDisplays.length);
+    setSelectedRange(null);
+  };  
+
   const handleRestore = (textObject) => {
     const savedList = JSON.parse(localStorage.getItem(`savedTextList_${username}`)) || [];
     const found = savedList.find(item => item.content.title === textObject.title);
   
     if (found) {
-      const updated = [...textDisplays, found.content];
-      setTextDisplays(updated);
+      addExistingTextDisplay(found.content);
     }
   };
   
@@ -175,7 +186,6 @@ export default function MainPage({ switchTo }) {
     setSearchResults(results);
     setSearchMessage(`${results.length} match${results.length !== 1 ? "es" : ""} found.`);
   };
-  
 
   const handleReplaceAll = () => {
     if (!searchQuery.trim() || selectedIndex === null) return;
@@ -218,7 +228,7 @@ export default function MainPage({ switchTo }) {
       <div className={classes["main-area"]}>
 
         <div className={classes["controls"]}>
-        <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white">
+        <button onClick={handleLogout} >
           <LogOut className="w-5 h-5" />
         </button>
           <button onClick={addTextDisplay}>Add TextDisplay</button>
