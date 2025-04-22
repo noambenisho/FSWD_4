@@ -7,8 +7,10 @@ import SavedListPanel from './SavedListPanel';
 import '../CSS/SavedListPanel.module.css';
 import { LogOut, Undo, Redo } from "lucide-react";
 import styles from '../CSS/MainPage.module.css';
+import PropTypes from 'prop-types';
 
-export default function MainPage({ switchTo }) {
+export default function MainPage(props) {
+  const { switchTo } = props;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchMessage, setSearchMessage] = useState("");
   const [replaceQuery, setReplaceQuery] = useState("");
@@ -376,3 +378,7 @@ export default function MainPage({ switchTo }) {
     </div>  
   );
 }
+
+MainPage.propTypes = {
+  switchTo: PropTypes.func.isRequired,
+};

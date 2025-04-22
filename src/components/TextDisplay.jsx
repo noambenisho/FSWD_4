@@ -42,11 +42,11 @@ export default function TextDisplay(props) {
           <span
             key={index}
             data-index={index}
+            className={highlightIndices.has(index) ? styles.highlighted : ""}
             style={{
               fontFamily: item.fontFamily,
               fontSize: item.fontSize,
               color: item.color,
-              backgroundColor: highlightIndices.has(index) ? 'yellow' : 'transparent'
             }}
           >
             {item.char}
@@ -74,5 +74,18 @@ TextDisplay.propTypes = {
     ).isRequired,
   }).isRequired,
   setText: PropTypes.func.isRequired,
+  updateText: PropTypes.func,
   isSelected: PropTypes.bool.isRequired,
+  selectedRange: PropTypes.shape({
+    start: PropTypes.number,
+    end: PropTypes.number,
+  }),
+  setSelectedRange: PropTypes.func,
+  onSave: PropTypes.func,
+  index: PropTypes.number,
+  searchResults: PropTypes.arrayOf(
+    PropTypes.shape({
+      charIndex: PropTypes.number.isRequired
+    })
+  ),
 };

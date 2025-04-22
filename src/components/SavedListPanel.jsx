@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Pencil } from 'lucide-react'; 
 import styles from '../CSS/SavedListPanel.module.css';
+import PropTypes from 'prop-types';
 
-export default function SavedListPanel(prop) {
-  const { savedTitles, setSavedTitles, onRestore, username } = prop;
+export default function SavedListPanel(props) {
+  const { savedTitles, setSavedTitles, onRestore, username } = props;
   const [editIndex, setEditIndex] = useState(null);
   const [editTitle, setEditTitle] = useState("");
 
@@ -63,3 +64,16 @@ export default function SavedListPanel(prop) {
     </div>
   );
 }
+
+SavedListPanel.propTypes = {
+  savedTitles: PropTypes.arrayOf(
+    PropTypes.shape({
+      content: PropTypes.shape({
+        title: PropTypes.string,
+      }).isRequired,
+    })
+  ).isRequired,
+  setSavedTitles: PropTypes.func.isRequired,
+  onRestore: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+};

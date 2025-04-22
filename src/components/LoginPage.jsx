@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../CSS/user.module.css';
 
-const LoginPage = ({ switchTo }) => {
+const LoginPage = (props) => {
+  const { switchTo } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
